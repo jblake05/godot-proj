@@ -17,29 +17,31 @@ func _input(event):
 		rotation.y = rotation.y - event.relative.x * CAMERA_SENSITIVITY
 		rotation.x = rotation.x - event.relative.y * CAMERA_SENSITIVITY
 		
-		
-
 func _physics_process(delta):
-	var direction = Vector3.ZERO
+	var input = Vector3.ZERO
 	
 	#if mouse_relative_pos != Vector2.ZERO:
 		#print("test")
 		#print(randi() % 100)
 
-	if Input.is_action_pressed("move_right"):
-		direction.x += 1
-	if Input.is_action_pressed("move_left"):
-		direction.x -= 1
-	if Input.is_action_pressed("move_back"):
-		direction.z += 1
 	if Input.is_action_pressed("move_forward"):
-		direction.z -= 1
+		input = Vector3(1, 0, 1)
+	if Input.is_action_pressed("move_left"):
+		input = Vector3(1, 0, -1)
+	if Input.is_action_pressed("move_back"):
+		input = Vector3(-1, 0, -1)
+	if Input.is_action_pressed("move_right"):
+		input = Vector3(-1, 0, 1)
 
+	var header = -global_transform.basis.z
+	var direction = input*header
 	if direction != Vector3.ZERO:
 		direction = direction.normalized()
 		# Setting the basis property will affect the rotation of the node.
 		# $Pivot.basis = Basis.looking_at(direction)
 
+	
+	
 	# Ground Velocity
 	target_velocity.x = direction.x * speed
 	target_velocity.z = direction.z * speed
